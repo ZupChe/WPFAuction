@@ -9,32 +9,32 @@ using System.Threading.Tasks;
 
 namespace UserWpf.Model
 {
-    public class ItemCollection : ObservableCollection<User>
+    public class ItemCollection : ObservableCollection<Item>
     {
-        public static UserCollection GetAllItem()
+        public static ItemCollection GetAllItem()
         {
             ItemCollection items = new ItemCollection();
-            Items item = null;
+           
 
             using (SqlConnection conn = new SqlConnection())
             {
                 conn.ConnectionString = ConfigurationManager.ConnectionStrings["ConnString"].ToString();
                 conn.Open();
 
-                SqlCommand command = new SqlCommand("SELECT Id, Item, Detail, Price, FROM [Auctions]", conn);
+                SqlCommand command = new SqlCommand("SELECT Id, Name, Detail, Price, LastBidUser, IsClosed FROM [Auctions]", conn);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
 
-                        item = Items.GetItemFromResultSet(reader);
+                        var item = new Item((int)reader["Id"], (string)reader["Name"], (string)reader["Detail"], (int)reader["Price"], (int)reader["LastBidUser"], (bool)reader["IsClosed"]);
                         items.Add(item);
                     }
                 }
 
             }
-            return item;
+            return items;
         }
 
         

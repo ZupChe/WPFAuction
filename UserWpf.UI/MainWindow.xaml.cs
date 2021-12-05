@@ -47,10 +47,10 @@ namespace UserWpf.UI
             MainWindowViewModel viewModel = (MainWindowViewModel)DataContext;
             NewEditWindow editWindow = new NewEditWindow();
             
-            var editmodel = new NewEditWindowViewModel(viewModel.CurrentUser);
+            /*var editmodel = new NewEditWindowViewModel(viewModel.CurrentItem);
             editmodel.Ok += (s, args) => editWindow.Close();
             editWindow.DataContext = editmodel;
-            editWindow.ShowDialog();
+            editWindow.ShowDialog();*/
         }
 
         

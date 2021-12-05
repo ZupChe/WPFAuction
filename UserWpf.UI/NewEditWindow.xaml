@@ -7,13 +7,13 @@
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="300" Width="300">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Label x:Name="label1" Content="DisplayName" FontWeight="DemiBold"/>
-        <TextBox Text="{Binding CurrentUser.DisplayName}" x:Name="displayNameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="165" Margin="0,0,0,10"/>
-        <Label x:Name="label2" Content="UserName" FontWeight="DemiBold"/>
-        <TextBox Text="{Binding CurrentUser.UserName}" x:Name="userNameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="165" Margin="0,0,0,10"/>
-        <Label x:Name="label3" Content="UserPass" FontWeight="DemiBold"/>
-        <TextBox Text="{Binding CurrentUser.UserPass}" x:Name="userPassTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="165" Margin="0,0,0,10"/>
-        <CheckBox Content="Is Admin" IsChecked="{Binding CurrentUser.IsAdmin}" Margin="0,10,0,10"/>
+        <Label x:Name="productname" Content="Product Name" FontWeight="DemiBold"/>
+        <TextBox Text="{Binding CurrentItem.Name}" x:Name="displayNameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="165" Margin="0,0,0,10"/>
+        <Label x:Name="price" Content="Price" FontWeight="DemiBold"/>
+        <TextBox Text="{Binding CurrentItem.Price}" x:Name="userNameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="165" Margin="0,0,0,10"/>
+        <Label x:Name="detail" Content="Details" FontWeight="DemiBold"/>
+        <TextBox Text="{Binding CurrentItem.Detail}" x:Name="userPassTxtBox" HorizontalAlignment="Left" Height="50" TextWrapping="Wrap" VerticalAlignment="Top" Width="165" Margin="0,0,0,10"/>
+        
         <Button Command="{Binding SaveCommand}" x:Name="button" Content="Save" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75"></Button>
     </StackPanel>
 </Window>

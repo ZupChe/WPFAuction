@@ -14,60 +14,60 @@ namespace UserWpf.ViewModel
     {
         public void updateList()
         {
-            UserList = UserCollection.GetAllUsers();
+            ItemList = ItemCollection.GetAllItem();
 
-            UserListView = new ListCollectionView(UserList);
-            UserListView.Filter = UserFilter;
+            ItemListView = new ListCollectionView(iList);
+           ItemListView.Filter = ItemFilter;
         }
 
 
-        private User currentUser;
-        private UserCollection userList;
-        private ListCollectionView userListView;
+        private Item currentItem;
+        private ItemCollection iList;
+        private ListCollectionView iListView;
 
         private string filteringText;
 
 
-        public User CurrentUser
+        public Item CurrentItem
         {
-            get { return currentUser; }
+            get { return currentItem; }
             set
             {
-                if (currentUser == value)
+                if (currentItem == value)
                 {
                     return;
                 }
-                currentUser = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("CurrentUser"));
+                currentItem = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("CurrentItem"));
             }
         }
 
-        public UserCollection UserList
+        public ItemCollection ItemList
         {
-            get { return userList; }
+            get { return iList; }
             set
             {
-                if (userList == value)
+                if (iList == value)
                 {
                     return;
                 }
-                userList = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("UserList"));
+                iList = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("ItemList"));
             }
 
         }
 
-        public ListCollectionView UserListView
+        public ListCollectionView ItemListView
         {
-            get { return userListView; }
+            get { return iListView; }
             set
             {
-                if (userListView == value)
+                if (iListView == value)
                 {
                     return;
                 }
-                userListView = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("userListView"));
+                iListView = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("ItemListView"));
             }
 
         }
@@ -105,13 +105,13 @@ namespace UserWpf.ViewModel
 
         void DeleteExecute(object obj)
         {
-            CurrentUser.DeletePerson();
-            UserList.Remove(CurrentUser);
+            CurrentItem.DeleteItem();
+            ItemList.Remove(CurrentItem);
         }
 
         bool CanDelete(object obj)
         {
-            if (CurrentUser == null) return false;
+            if (CurrentItem == null) return false;
 
             return true;
         }
@@ -122,30 +122,30 @@ namespace UserWpf.ViewModel
 
             this.PropertyChanged += MainWindowViewModel_PropertyChanged;
 
-            UserList = UserCollection.GetAllUsers();
+            ItemList = ItemCollection.GetAllItem();
 
-            UserListView = new ListCollectionView(UserList);
-            UserListView.Filter = UserFilter;
+            ItemListView = new ListCollectionView(ItemList);
+            ItemListView.Filter = ItemFilter;
 
-            CurrentUser = new User();
-
+            CurrentItem = new Item();
+            LoginUser = new User();
         }
 
         private void MainWindowViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if(e.PropertyName.Equals("FilteringText"))
             {
-                UserListView.Refresh();
+                ItemListView.Refresh();
             }
         }
 
-        private bool UserFilter(object obj)
+        private bool ItemFilter(object obj)
         {
             if (FilteringText == null) return true;
             if (FilteringText.Equals("")) return true;
 
-            User user = obj as User;
-            return (user.DisplayName.ToLower().StartsWith(FilteringText.ToLower()) || user.UserName.ToLower().StartsWith(FilteringText.ToLower()));
+            Item item = obj as Item;
+            return (item.Name.ToLower().StartsWith(FilteringText.ToLower()) || item.Detail.ToLower().StartsWith(FilteringText.ToLower()) || item.Price.ToString().ToLower().StartsWith(FilteringText.ToLower()));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -153,6 +153,22 @@ namespace UserWpf.ViewModel
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, e);
+        }
+
+        private User loginUser;
+
+        public User LoginUser
+        {
+            get { return loginUser; }
+            set
+            {
+                if (loginUser == value)
+                {
+                    return;
+                }
+                loginUser = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("LoginUser"));
+            }
         }
     }
 }

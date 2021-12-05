@@ -12,20 +12,20 @@ namespace UserWpf.ViewModel
     public class NewEditWindowViewModel : INotifyPropertyChanged
     {
 
-        private User currentUser;
+        private Item currentItem;
         private string windowTitle;
 
-        public User CurrentUser
+        public Item CurrentItem
         {
-            get { return currentUser; }
+            get { return currentItem; }
             set
             {
-                if (currentUser == value)
+                if (currentItem == value)
                 {
                     return;
                 }
-                currentUser = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("CurrentUser"));
+                currentItem = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("CurrentItem"));
             }
         }
 
@@ -44,18 +44,18 @@ namespace UserWpf.ViewModel
             }
         }
 
-        public NewEditWindowViewModel(User user)
+        public NewEditWindowViewModel(Item item)
         {
             SaveCommand = new RelayCommand(SaveExecute, CanSave);
-            CurrentUser = user;
-            WindowTitle = "Edit User";
+            CurrentItem = item;
+            WindowTitle = "Edit Item";
         }
 
         public NewEditWindowViewModel()
         {
             SaveCommand = new RelayCommand(SaveExecute, CanSave);
-            CurrentUser = new User();
-            WindowTitle = "New User";
+            CurrentItem = new Item();
+            WindowTitle = "New Item";
         }
 
         private ICommand saveCommand;
@@ -75,9 +75,9 @@ namespace UserWpf.ViewModel
 
         void SaveExecute(object obj)
         {
-            if (CurrentUser != null)
+            if (CurrentItem != null)
             {
-                CurrentUser.Save();
+                CurrentItem.Save();
                 Ok(this, new EventArgs());
             }
         }
