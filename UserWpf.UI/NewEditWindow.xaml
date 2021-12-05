@@ -1,0 +1,19 @@
+﻿<Window x:Class="UserWpf.UI.NewEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UserWpf.UI"
+        mc:Ignorable="d"
+        Title="{Binding WindowTitle}" Height="300" Width="300">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Label x:Name="label1" Content="DisplayName" FontWeight="DemiBold"/>
+        <TextBox Text="{Binding CurrentUser.DisplayName}" x:Name="displayNameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="165" Margin="0,0,0,10"/>
+        <Label x:Name="label2" Content="UserName" FontWeight="DemiBold"/>
+        <TextBox Text="{Binding CurrentUser.UserName}" x:Name="userNameTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="165" Margin="0,0,0,10"/>
+        <Label x:Name="label3" Content="UserPass" FontWeight="DemiBold"/>
+        <TextBox Text="{Binding CurrentUser.UserPass}" x:Name="userPassTxtBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="165" Margin="0,0,0,10"/>
+        <CheckBox Content="Is Admin" IsChecked="{Binding CurrentUser.IsAdmin}" Margin="0,10,0,10"/>
+        <Button Command="{Binding SaveCommand}" x:Name="button" Content="Save" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75"></Button>
+    </StackPanel>
+</Window>
