@@ -56,5 +56,27 @@ namespace UserWpf.Model
             }
             
         }
+
+        public static User GetUser(string UserName)
+        {
+
+
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = ConfigurationManager.ConnectionStrings["ConnString"].ToString();
+                conn.Open();
+
+                SqlCommand command = new SqlCommand("SELECT * FROM [User] Where UserName = @UserName", conn);
+
+                command.Parameters.AddWithValue("@UserName", UserName);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    reader.Read();
+                    return User.GetUserFromResultSet(reader);
+                }
+            }
+
+        }
     }
 }

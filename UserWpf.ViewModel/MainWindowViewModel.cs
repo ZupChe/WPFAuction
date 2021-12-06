@@ -128,7 +128,6 @@ namespace UserWpf.ViewModel
             ItemListView.Filter = ItemFilter;
 
             CurrentItem = new Item();
-            LoginUser = new User();
         }
 
         private void MainWindowViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

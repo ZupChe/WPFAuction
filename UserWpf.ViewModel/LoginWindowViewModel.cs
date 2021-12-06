@@ -71,7 +71,10 @@ namespace UserWpf.ViewModel
 
             if (UserCollection.IsValidUser(UserName.Trim(), pass.Password))
             {
-                this.Ok(this, new EventArgs());
+                var user = UserCollection.GetUser(UserName.Trim());
+                var args = new OkEventArgs();
+                args.user = user;
+                this.Ok(this, args);
             }
             else
             {
@@ -106,9 +109,13 @@ namespace UserWpf.ViewModel
             public string Password;
         }
 
-        public event EventHandler<EventArgs> Ok;
+        public event EventHandler<OkEventArgs> Ok;
+        public class OkEventArgs : EventArgs
+        {
+            public User user;
+        }
 
-
+        
         public event EventHandler<EventArgs> Error;
 
         

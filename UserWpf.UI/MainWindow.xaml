@@ -6,28 +6,30 @@
         xmlns:view_model="clr-namespace:UserWpf.ViewModel;assembly=UserWpf.ViewModel" 
         xmlns:local="clr-namespace:UserWpf.UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="800">
+        Title="MainWindow" Background="DarkTurquoise" Height="800" Width="800">
     <Window.DataContext>
         <view_model:MainWindowViewModel></view_model:MainWindowViewModel>
     </Window.DataContext>
     <Grid>
-        <DataGrid ItemsSource="{Binding ItemListView}" SelectedItem="{Binding CurrentItem}" HorizontalAlignment="Center" Height="222"  VerticalAlignment="Center" Width="619" SelectionChanged="ListBox_SelectionChanged" Margin="41,129,133.6,219.4" AutoGenerateColumns="False">
+        <DataGrid ItemsSource="{Binding ItemListView}" SelectedItem="{Binding CurrentItem}" HorizontalAlignment="Left" Height="222"  VerticalAlignment="Center" Width="700" SelectionChanged="ListBox_SelectionChanged" Margin="40,-85,0,0" AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Auction}" Header="Auction" Width="150"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Auction" Width="150"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Detail}" Header="Detail" Width="150"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Price}" Header="Price" Width="150"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding LastBidUser}" Header="Last Bid User" Width="150"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding IsClosed}" Header="IsClosed" Width="150"></DataGridTextColumn>
+
             </DataGrid.Columns>
         </DataGrid>
-        <Button Name="newBtn" Content="New" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="30" Margin="140,511,0,0" Click="newBtn_Click"/>
-        <Button Name="editBtn" Content="Edit" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="26" Margin="300,515,0,0" Click="editBtn_Click"/>
-        <Button Command="{Binding DeleteCommand}" Name="deleteBtn" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="26" Margin="485,515,0,0" RenderTransformOrigin="1.628,-4.681"/>
-        <TextBox Name="FilteringBox" Text="{Binding FilteringText, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" VerticalAlignment="Top" Width="175" Margin="485,87,0,0"/>
-        <Label Content="Search:" HorizontalAlignment="Left" Margin="416,87,0,0" VerticalAlignment="Top" Height="26" Width="51" FontWeight="DemiBold"/>
-        <Button Name="loginBtn" Content="Login" Background="Orange" HorizontalAlignment="Left" Margin="41,87,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Name="bidBtn" Content="New Bid" Background="MediumAquamarine" HorizontalAlignment="Left" Margin="595,504,0,0" VerticalAlignment="Top" Width="82" Height="45"/>
-        <Label Content="Welcome to the online platform for auction" FontSize="25" Margin="163,28,133.6,0" VerticalAlignment="Top"/>
-        <Label Content="{Binding LoginUser.DisplayName}" HorizontalAlignment="Left" Margin="140,84,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.283,-0.953" Width="171" Height="25"/>
-
+        <Button Name="newBtn" Content="New" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="30" Margin="40,504,0,0" Click="newBtn_Click"/>
+        <Button Command="{Binding DeleteCommand}" Name="deleteBtn" Content="Delete" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="30" Margin="150,504,0,0" RenderTransformOrigin="1.628,-4.681" Click="deleteBtn_Click"/>
+        <TextBox Name="FilteringBox" Text="{Binding FilteringText, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" VerticalAlignment="Top" Width="175" Margin="485,100,0,0"/>
+        <Label Content="Search:" HorizontalAlignment="Left" Margin="416,100,0,0" VerticalAlignment="Top" Height="26" Width="51" FontWeight="DemiBold"/>
+        <Button Name="loginBtn" Content="Login" Background="Orange" HorizontalAlignment="Left" Margin="40,100,0,0" VerticalAlignment="Top" Width="75" Click="loginBtn_Click"/>
+        <Button Name="bidBtn" Content="New Bid" Visibility="Collapsed" Background="MediumAquamarine" HorizontalAlignment="Left" Margin="595,504,0,0" VerticalAlignment="Top" Width="82" Height="45" Click="bidBtn_Click"/>
+        <Label Content="Welcome to the online platform for auction" Foreground="Red" FontSize="25" Margin="163,28,133.6,0" VerticalAlignment="Top"/>
+        <Label Content="{Binding LoginUser.DisplayName}" HorizontalAlignment="Left" Margin="204,100,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.283,-0.953" Width="171" Height="25"/>
+        <Label Name="lblwlc" Content="Welcome" Foreground="Blue" Visibility="Collapsed" HorizontalAlignment="Left" Margin="140,100,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

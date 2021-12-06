@@ -21,15 +21,27 @@ namespace UserWpf.UI
     /// </summary>
     public partial class LoginWindow : Window
     {
-        public LoginWindow()
+        public LoginWindow(MainWindow mainModel)
         {
             InitializeComponent();
             var model = new LoginWindowViewModel((sender, args) =>
-    args.Password = UserPass.Password);
+            args.Password = UserPass.Password);
             model.Ok += (sender, args) =>
             {
-                MainWindow main = new MainWindow();
-                main.Show();
+                (mainModel.DataContext as MainWindowViewModel).LoginUser = args.user;
+                mainModel.loginBtn.Content = "Logout";
+                if(args.user.IsAdmin)
+                {
+                    mainModel.newBtn.Visibility = Visibility.Visible;
+                    mainModel.deleteBtn.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    mainModel.bidBtn.Visibility = Visibility.Visible;
+                }
+
+                mainModel.lblwlc.Visibility = Visibility.Visible;                
+
                 this.Close();
             };
 

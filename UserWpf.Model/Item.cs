@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace UserWpf.Model
 {
@@ -17,7 +18,7 @@ namespace UserWpf.Model
         private string _name;
         private string _detail;
         private int _price;
-        private int _lastBidUser;
+        private string _lastBidUser;
         private bool _isClosed;
 
 
@@ -89,7 +90,7 @@ namespace UserWpf.Model
             }
         }
 
-        public int LastBidUser
+        public string LastBidUser
         {
             get { return _lastBidUser; }
             set
@@ -119,7 +120,27 @@ namespace UserWpf.Model
         }
 
 
-        public Item(int Id, string Name, string Detail, int Price, int LastBidUser, bool IsClosed)
+
+        private DispatcherTimer _bidCouter;
+        private TimeSpan _bidTime;
+        private DateTime _bidStartDate;
+
+
+
+        public TimeSpan BidTime
+        {
+            get { return _bidTime; }
+            set
+            {
+                if (_bidTime == value) return;
+                _bidTime = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("BidTime"));
+            }
+        }
+
+
+
+        public Item(int Id, string Name, string Detail, int Price, string LastBidUser, bool IsClosed)
         {
             this.Name = Name;
             this.Detail = Detail;
@@ -127,6 +148,20 @@ namespace UserWpf.Model
             this.LastBidUser = LastBidUser;
             this._isClosed = IsClosed;
             this.Id = Id;
+
+
+
+            if (!IsClosed)
+            {
+                _bidCouter = new DispatcherTimer();
+                _bidCouter.Interval = TimeSpan.FromMilliseconds(300);
+                _bidCouter.Tick += (s, a) =>
+                {
+
+
+
+                };
+            }
         }
 
 
@@ -190,7 +225,7 @@ namespace UserWpf.Model
                 conn.ConnectionString = ConfigurationManager.ConnectionStrings["ConnString"].ToString();
                 conn.Open();
 
-                SqlCommand command = new SqlCommand("INSERT INTO [Auctions](Name, Detail, Price, LastBidUser) VALUES(@Name, @Detail, @Price, @LastBidUser); SELECT IDENT_CURRENT('Auctions');", conn);
+                SqlCommand command = new SqlCommand("INSERT INTO [Auctions](Name, Detail, Price, IsClosed) VALUES(@Name, @Detail, @Price, 0); SELECT IDENT_CURRENT('Auctions');", conn);
 
                 SqlParameter nameParam = new SqlParameter("@Name", SqlDbType.NVarChar);
                 nameParam.Value = this.Name;
@@ -201,14 +236,11 @@ namespace UserWpf.Model
                 SqlParameter priceParam = new SqlParameter("@Price", SqlDbType.NVarChar);
                 priceParam.Value = this.Price;
 
-                SqlParameter lastBidUserParam = new SqlParameter("@LastBidUser", SqlDbType.NVarChar);
-                lastBidUserParam.Value = this.LastBidUser;
-
 
                 command.Parameters.Add(nameParam);
                 command.Parameters.Add(detailParam);
                 command.Parameters.Add(priceParam);
-                command.Parameters.Add(lastBidUserParam);
+              
 
                 var id = command.ExecuteScalar();
 
@@ -232,6 +264,31 @@ namespace UserWpf.Model
                 UpdateItem();
             }
         }
+
+        public void UpdatePrice(int LoginUser)
+        {
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = ConfigurationManager.ConnectionStrings["ConnString"].ToString();
+                conn.Open();
+
+                SqlCommand command = new SqlCommand("UPDATE [Auctions] SET LastBidUser=@lbu, Price=(select Price from Auctions where Id=@Id)+1 WHERE Id=@Id", conn);
+
+                SqlParameter myParam = new SqlParameter("@Id", SqlDbType.Int, 11);
+                myParam.Value = this.Id;
+
+
+               
+                command.Parameters.Add(myParam);
+
+                command.Parameters.AddWithValue("@lbu", LoginUser);
+
+                int rows = command.ExecuteNonQuery();
+
+            }
+        }
+
+
 
     }
 }

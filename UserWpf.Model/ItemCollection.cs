@@ -21,14 +21,14 @@ namespace UserWpf.Model
                 conn.ConnectionString = ConfigurationManager.ConnectionStrings["ConnString"].ToString();
                 conn.Open();
 
-                SqlCommand command = new SqlCommand("SELECT Id, Name, Detail, Price, LastBidUser, IsClosed FROM [Auctions]", conn);
+                SqlCommand command = new SqlCommand("SELECT a.*, u.DisplayName FROM [Auctions] as a LEFT JOIN [User] as u on u.Id=a.LastBidUser", conn);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-
-                        var item = new Item((int)reader["Id"], (string)reader["Name"], (string)reader["Detail"], (int)reader["Price"], (int)reader["LastBidUser"], (bool)reader["IsClosed"]);
+                       
+                        var item = new Item((int)reader["Id"], (string)reader["Name"], (string)reader["Detail"], (int)reader["Price"], reader["DisplayName"].ToString(), (bool)reader["IsClosed"]);
                         items.Add(item);
                     }
                 }
