@@ -36,7 +36,9 @@ namespace UserWpf.UI
             editmodel.Ok += (s, args) => 
             {
                 editWindow.Close();
-                ((MainWindowViewModel)DataContext).updateList();
+                var currentlist = ((MainWindowViewModel)DataContext).ItemList;
+                var currentnewitem = editmodel.CurrentItem;
+                currentlist.Add(new Model.Item(currentnewitem.Id, currentnewitem.Name, currentnewitem.Detail, currentnewitem.Price, null, currentnewitem.IsClosed));
             };
             editWindow.DataContext = editmodel;
             editWindow.ShowDialog();
@@ -51,8 +53,7 @@ namespace UserWpf.UI
         private void bidBtn_Click(object sender, RoutedEventArgs e)
         {
             var model = this.DataContext as MainWindowViewModel;
-            model.CurrentItem.UpdatePrice(model.LoginUser.Id);
-            model.updateList();
+            model.CurrentItem.UpdatePrice(model.LoginUser);
         }
 
         private void deleteBtn_Click(object sender, RoutedEventArgs e)

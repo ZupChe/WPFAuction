@@ -126,8 +126,6 @@ namespace UserWpf.ViewModel
 
             ItemListView = new ListCollectionView(ItemList);
             ItemListView.Filter = ItemFilter;
-
-            CurrentItem = new Item();
         }
 
         private void MainWindowViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

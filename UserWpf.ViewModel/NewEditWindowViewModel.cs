@@ -44,13 +44,7 @@ namespace UserWpf.ViewModel
             }
         }
 
-        public NewEditWindowViewModel(Item item)
-        {
-            SaveCommand = new RelayCommand(SaveExecute, CanSave);
-            CurrentItem = item;
-            WindowTitle = "Edit Item";
-        }
-
+        
         public NewEditWindowViewModel()
         {
             SaveCommand = new RelayCommand(SaveExecute, CanSave);
@@ -77,7 +71,7 @@ namespace UserWpf.ViewModel
         {
             if (CurrentItem != null)
             {
-                CurrentItem.Save();
+                CurrentItem.Insert();
                 Ok(this, new EventArgs());
             }
         }

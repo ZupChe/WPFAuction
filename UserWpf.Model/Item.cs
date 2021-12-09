@@ -119,6 +119,22 @@ namespace UserWpf.Model
             }
         }
 
+        public bool IsOpened
+        {
+            get
+            {
+                return !_isClosed;
+            }
+        }
+
+        public string Active
+        {
+            get
+            {
+                return this._isClosed ? "Closed" : "Active";
+            }
+        }
+
 
 
         private DispatcherTimer _bidCouter;
@@ -127,15 +143,9 @@ namespace UserWpf.Model
 
 
 
-        public TimeSpan BidTime
+        public string BidTime
         {
-            get { return _bidTime; }
-            set
-            {
-                if (_bidTime == value) return;
-                _bidTime = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("BidTime"));
-            }
+            get { return _bidTime > default (TimeSpan) ? _bidTime.ToString(@"mm\:ss") : string.Empty; }
         }
 
 
@@ -146,21 +156,30 @@ namespace UserWpf.Model
             this.Detail = Detail;
             this.Price = Price;
             this.LastBidUser = LastBidUser;
-            this._isClosed = IsClosed;
+            this.IsClosed = IsClosed;
             this.Id = Id;
 
 
 
             if (!IsClosed)
             {
+                _bidStartDate = DateTime.Now;
                 _bidCouter = new DispatcherTimer();
                 _bidCouter.Interval = TimeSpan.FromMilliseconds(300);
                 _bidCouter.Tick += (s, a) =>
                 {
+                    _bidTime = TimeSpan.FromMinutes(2) - (DateTime.Now - _bidStartDate);
+                    if (_bidTime <= default (TimeSpan))
+                    {
+                        this.Close();
+                    }
 
+                    OnPropertyChanged(new PropertyChangedEventArgs("BidTime"));
 
 
                 };
+
+                _bidCouter.Start();
             }
         }
 
@@ -191,31 +210,33 @@ namespace UserWpf.Model
             }
         }
 
-        public void UpdateItem()
+        public void Close()
         {
             using (SqlConnection conn = new SqlConnection())
             {
                 conn.ConnectionString = ConfigurationManager.ConnectionStrings["ConnString"].ToString();
                 conn.Open();
 
-                SqlCommand command = new SqlCommand("UPDATE [Auctions] SET Detail=@Detail, Price=@Price WHERE Id=@Id", conn);
-
-                SqlParameter detailParam = new SqlParameter("@Detail", SqlDbType.NVarChar);
-                detailParam.Value = this.Detail;
-
-                SqlParameter priceParam = new SqlParameter("@Price", SqlDbType.NVarChar);
-                priceParam.Value = this.Price;
+                SqlCommand command = new SqlCommand("UPDATE [Auctions] SET IsClosed=1 WHERE Id=@Id", conn);
 
                 SqlParameter myParam = new SqlParameter("@Id", SqlDbType.Int, 11);
                 myParam.Value = this.Id;
-
-                command.Parameters.Add(detailParam);
-                command.Parameters.Add(priceParam);
+              
                 command.Parameters.Add(myParam);
 
                 int rows = command.ExecuteNonQuery();
+                if(rows > 0)
+                {
+                    this.IsClosed = true;
+                    this._bidCouter.Stop();
+                }
 
             }
+        }
+
+        private void ResetTime()
+        {
+            this._bidStartDate = DateTime.Now;
         }
 
         public void Insert()
@@ -252,20 +273,8 @@ namespace UserWpf.Model
             }
         }
 
-        public void Save()
-        {
-            if (Id == 0)
-            {
-                Insert();
-            }
-
-            else
-            {
-                UpdateItem();
-            }
-        }
-
-        public void UpdatePrice(int LoginUser)
+       
+        public void UpdatePrice(User LoginUser)
         {
             using (SqlConnection conn = new SqlConnection())
             {
@@ -281,9 +290,15 @@ namespace UserWpf.Model
                
                 command.Parameters.Add(myParam);
 
-                command.Parameters.AddWithValue("@lbu", LoginUser);
+                command.Parameters.AddWithValue("@lbu", LoginUser.Id);
 
                 int rows = command.ExecuteNonQuery();
+                if (rows > 0)
+                {
+                    this.Price++;
+                    this.ResetTime();
+                    this.LastBidUser = LoginUser.DisplayName;
+                }
 
             }
         }
